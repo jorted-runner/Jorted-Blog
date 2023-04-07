@@ -12,19 +12,21 @@ import datetime as dt
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 
+db = SQLAlchemy()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 if os.environ.get("LOCAL") == "True":
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'    
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
